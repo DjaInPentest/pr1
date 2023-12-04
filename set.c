@@ -4,27 +4,27 @@
 
 #define TABLE_SIZE 1000
 
-// Структура для хранения элемента множества
+// Структура для хранения элемента множества.
 typedef struct SetEntry {
     char* value;
     struct SetEntry* next;
 } SetEntry;
 
-// Структура для хранения множества
+//Храним множество.
 typedef struct {
     SetEntry** entries;
 } Set;
 
-// Функция для вычисления хеш-кода значения
+// Функция для вычисления хеш-кода значения (из таблиц, да не O(1)...)...
 unsigned int hash(const char* value) {
     unsigned int hash = 0;
     for (int i = 0; i < strlen(value); i++) {
-        hash = hash * 31 + value[i];
+        hash = hash * 19 + value[i];
     }
     return hash % TABLE_SIZE;
 }
 
-// Функция для создания нового элемента множества
+// Функция для создания нового элемента множества.
 SetEntry* set_new_entry(const char* value) {
     SetEntry* entry = malloc(sizeof(SetEntry));
     entry->value = strdup(value);
@@ -32,14 +32,14 @@ SetEntry* set_new_entry(const char* value) {
     return entry;
 }
 
-// Функция для создания нового множества
+// Функция для создания нового множества.
 Set* new_set() {
     Set* set = malloc(sizeof(Set));
     set->entries = calloc(TABLE_SIZE, sizeof(SetEntry*));
     return set;
 }
 
-// Функция для добавления элемента в множество
+//Функция для добавления элемента в множество.
 void sadd(Set* set, const char* value) {
     unsigned int index = hash(value);
     if (set->entries[index] == NULL) {
@@ -48,7 +48,7 @@ void sadd(Set* set, const char* value) {
     else {
         SetEntry* entry = set->entries[index];
         while (entry != NULL) {
-            if (strcmp(entry->value, value) == 0) {
+            if (strcmp(entry->value, value) == 0) {  //Обрабатываем коллизию. 
                 return;
             }
             if (entry->next == NULL) {
@@ -60,7 +60,7 @@ void sadd(Set* set, const char* value) {
     }
 }
 
-// Функция для удаления элемента из множества
+//Функция для удаления элемента из множества.
 void srem(Set* set, const char* value) {
     unsigned int index = hash(value);
     SetEntry* entry = set->entries[index];
@@ -82,7 +82,7 @@ void srem(Set* set, const char* value) {
     }
 }
 
-// Функция для проверки наличия элемента в множестве
+// Функция для проверки наличия элемента в множестве.
 int sismember(Set* set, const char* value) {
     unsigned int index = hash(value);
     SetEntry* entry = set->entries[index];
@@ -95,7 +95,7 @@ int sismember(Set* set, const char* value) {
     return 0;
 }
 
-//Функция для освобождения памяти, занятой множеством
+//Функция для освобождения памяти, занятой множеством.
 void free_set(Set* set) {
     for (int i = 0; i < TABLE_SIZE; i++) {
         SetEntry* entry = set->entries[i];
@@ -138,13 +138,9 @@ void loadSetFromFile(Set* set, const char* filename) {
 
     char buffer[255];
     while (fgets(buffer, sizeof(buffer), file) != NULL) {
-        buffer[strcspn(buffer, "\n")] = 0; // Убираем символ новой строки
+        buffer[strcspn(buffer, "\n")] = 0; // Убираем символ новой строки.
         sadd(set, buffer);
     }
 
     fclose(file);
 }
-/*
-
-
-*/

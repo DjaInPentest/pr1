@@ -82,29 +82,9 @@ void loadQueueFromFile(Structure* queue, const char* filename) {
 
     char buffer[255];
     while (fgets(buffer, sizeof(buffer), file) != NULL) {
-        buffer[strcspn(buffer, "\n")] = 0; // Remove newline character
+        buffer[strcspn(buffer, "\n")] = 0; //Ну пон, типо до новой строки.
         qpush(queue, buffer);
     }
 
     fclose(file);
 }
-/*
-int main() {
-    Structure* Queue = createQueue();
-
-    // Load queue from file at startup
-    loadQueueFromFile(Queue, "file.data");
-    qpush(Queue, "Hello");
-    printQueue(Queue);
-    qpush(Queue, "1");
-    qpush(Queue, "2");
-    printQueue(Queue);
-    qpop(Queue);
-    printQueue(Queue);
-
-    // Save queue to file before program exit
-    saveQueueToFile(Queue, "file.data");
-
-    return 0;
-}
-*/

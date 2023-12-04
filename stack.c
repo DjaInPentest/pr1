@@ -37,7 +37,7 @@ void delStack(Structure* stack) {
 }
 
 void printStack(Structure* stack) {
-    for (StructureElement* print = stack->head; print != NULL; print = print->next) {
+    for (StructureElement* print = stack->head; print != NULL; print = print->next) { //Короче, переходим по всему стеку с головы и выписываем его.
         printf("%s\n", print->value);
     }
     printf("\n");
@@ -49,7 +49,7 @@ void saveStackToFile(Structure* stack, const char* filename) {
         printf("Could not open file for writing");
         exit(1);
     }
-
+    //То же самое, что принт, только сейв.
     StructureElement* current = stack->head;
     while (current != NULL) {
         fprintf(file, "%s\n", current->value);
@@ -69,7 +69,7 @@ void loadStackFromFile(Structure* stack, const char* filename) {
 
     char buffer[255];
     while (fgets(buffer, sizeof(buffer), file) != NULL) {
-        buffer[strcspn(buffer, "\n")] = 0; // Убираем символ новой строки
+        buffer[strcspn(buffer, "\n")] = 0; //Убираем символ новой строки.
         addStack(stack, buffer);
     }
 
